@@ -1,8 +1,12 @@
 // For MMA2001 Warman Competition
 // Team 207
 // Final robot running code
-// VERSION 1
+// VERSION 2
 
+// Robot didnt make it up the stairs
+// Changes: increasing up stairs speed, removing time between turn and going up:
+// removing ramp down speed at the end of stage 4
+// ramp up speed from duty4 to duty5
 // account for position change that occurs after turning
 
 // m4 reverse dirction when depositing rocks?
@@ -62,7 +66,7 @@ int time4 = 1000;
 int duty4 = 150;
 // stage five - drive up ramp
 int time5 = 5000;
-int duty5 = 200;
+int duty5 = 255; // to max for power 
 // stage six - deposit rocks
 int time6 = 4000;
 int duty6 = 250;
@@ -183,18 +187,12 @@ void loop() {i
       delay(change);                                               
     }
     delay(time4);
-    for (duty = duty4; duty >= 0; duty -= 1) {  
-      analogWrite(M1_PWM, duty);
-      analogWrite(M2_PWM, duty);              
-      delay(change);                                              
-    }
-    delay(stageDelay);
 
     // STAGE FIVE: DRIVE UP RAMP
     // M1, M2: forward
     digitalWrite(M1_DIR, HIGH);
     digitalWrite(M2_DIR, HIGH);
-    for (duty = 0; duty <= duty5; duty += 1) {  
+    for (duty = duty4; duty <= duty5; duty += 1) {  
       analogWrite(M1_PWM, duty); 
       analogWrite(M2_PWM, duty);             
       delay(change);                                               
