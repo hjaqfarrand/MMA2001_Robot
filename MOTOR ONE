@@ -1,0 +1,113 @@
+// CODE TO ONLY TEST MOTOR ONE
+
+// <PIN DEFINITIONS>
+// Motor one = left
+#define M1_PWM 6
+#define M1_DIR 7
+// Motor two = right
+#define M2_PWM 3
+#define M2_DIR 8
+// Motor three = UNUSED
+#define M3_PWM 5
+#define M3_DIR 12
+// Motor four = arm
+#define M4_PWM 11
+#define M4_DIR 13
+// Relays 
+#define RELAY1 2
+#define RELAY2 4
+// Servo one = pull string (rocks fall out)
+#define SERVO1 9
+// Servo two = UNUSED
+#define SERVO2 10
+#include <Servo.h>
+Servo myServo1;
+Servo myServo2;
+
+// <GLOBAL DECLARATIONS - in milliseconds>
+int duty = 200;    // variable to store duty cycle which controls the motor's effective voltage (range 0-255)
+int pos = 0;        // variable for position of servo
+int stageDelay = 1000;
+int change = 1;
+int ledCount = 3;
+int ledPins[] = {31, 33, 35};
+int ledDelay = 300;
+int buttonOn = 37;
+int state = 0;
+int finished = 1;
+
+
+// ONLY CHANGE VARIABLES INSIDE OF HERE
+// stage one - scoop rocks
+int time1 = 5000;
+int duty1 = 150;
+// stage two - reverse and turn
+int time2rev = 2000;
+int time2spin = 5000;
+int duty2 = 200;
+// stage three - drive to ramp
+int time3 = 2000;
+int duty3 = 200;
+// stage four - turn to face ramp
+int time4 = 1000;
+int duty4 = 150;
+// stage five - drive up ramp
+int time5 = 5000;
+int duty5 = 200;
+// stage six - deposit rocks
+int time6 = 4000;
+int duty6 = 250;
+
+
+void setup() {
+  /* <CONFIGURE ALL WM1 PINS AS OUTPUTS> */ 
+  pinMode(M1_PWM, OUTPUT);
+  pinMode(M1_DIR, OUTPUT);
+  pinMode(M2_PWM, OUTPUT);
+  pinMode(M2_DIR, OUTPUT);
+  pinMode(M3_PWM, OUTPUT);
+  pinMode(M3_DIR, OUTPUT);
+  pinMode(M4_PWM, OUTPUT);
+  pinMode(M4_DIR, OUTPUT);
+  pinMode(RELAY1, OUTPUT);
+  pinMode(RELAY2, OUTPUT);
+  pinMode(SERVO1, OUTPUT);
+  pinMode(SERVO2, OUTPUT);
+  myServo1.attach(9);
+  myServo2.attach(10);
+  // led and button
+  pinMode(ledPins[0], OUTPUT);
+  pinMode(ledPins[1], OUTPUT);
+  pinMode(ledPins[2], OUTPUT);
+  pinMode(buttonOn, INPUT);
+}
+
+void loop() {
+
+
+    // STAGE TWO: CHANGE DIRECTION
+    // reverse - M1, M2
+    digitalWrite(M1_DIR, LOW);
+    for (duty = 0; duty <= duty2; duty += 1) {  
+      analogWrite(M1_PWM, duty); 
+      delay(change);                                               
+    }
+    delay(2000);
+    for (duty = duty2; duty >= 0; duty -= 1) {  
+      analogWrite(M1_PWM, duty);
+      delay(change); 
+
+
+    digitalWrite(M1_DIR, HIGH);
+    for (duty = 0; duty <= duty2; duty += 1) {  
+      analogWrite(M1_PWM, duty); 
+      delay(change);                                               
+    }
+    delay(2000);
+    for (duty = duty2; duty >= 0; duty -= 1) {  
+      analogWrite(M1_PWM, duty);
+      delay(change);                                                 
+    }
+  
+      
+}}
