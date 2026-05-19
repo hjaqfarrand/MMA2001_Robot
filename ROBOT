@@ -1,0 +1,238 @@
+// For MMA2001 Warman Competition
+// Team 207
+// Final robot running code
+// VERSION 1
+
+// account for position change that occurs after turning
+
+// m4 reverse dirction when depositing rocks?
+
+// press button to start
+
+// <PIN DEFINITIONS>
+// Motor one = left
+#define M1_PWM 6
+#define M1_DIR 7
+// Motor two = right
+#define M2_PWM 3
+#define M2_DIR 8
+// Motor three = UNUSED
+#define M3_PWM 5
+#define M3_DIR 12
+// Motor four = arm
+#define M4_PWM 11
+#define M4_DIR 13
+// Relays 
+#define RELAY1 2
+#define RELAY2 4
+// Servo one = pull string (rocks fall out)
+#define SERVO1 9
+// Servo two = UNUSED
+#define SERVO2 10
+#include <Servo.h>
+Servo myServo1;
+Servo myServo2;
+
+// <GLOBAL DECLARATIONS - in milliseconds>
+int duty = 200;    // variable to store duty cycle which controls the motor's effective voltage (range 0-255)
+int pos = 0;        // variable for position of servo
+int stageDelay = 1000;
+int change = 1;
+int ledCount = 3;
+int ledPins[] = {31, 33, 35};
+int ledDelay = 300;
+int buttonOn = 37;
+int state = 0;
+int finished = 1;
+
+
+// ONLY CHANGE VARIABLES INSIDE OF HERE
+// stage one - scoop rocks
+int time1 = 5000;
+int duty1 = 150;
+// stage two - reverse and turn
+int time2rev = 2000;
+int time2spin = 5000;
+int duty2 = 200;
+// stage three - drive to ramp
+int time3 = 2000;
+int duty3 = 200;
+// stage four - turn to face ramp
+int time4 = 1000;
+int duty4 = 150;
+// stage five - drive up ramp
+int time5 = 5000;
+int duty5 = 200;
+// stage six - deposit rocks
+int time6 = 4000;
+int duty6 = 250;
+
+
+void setup() {
+  /* <CONFIGURE ALL WM1 PINS AS OUTPUTS> */ 
+  pinMode(M1_PWM, OUTPUT);
+  pinMode(M1_DIR, OUTPUT);
+  pinMode(M2_PWM, OUTPUT);
+  pinMode(M2_DIR, OUTPUT);
+  pinMode(M3_PWM, OUTPUT);
+  pinMode(M3_DIR, OUTPUT);
+  pinMode(M4_PWM, OUTPUT);
+  pinMode(M4_DIR, OUTPUT);
+  pinMode(RELAY1, OUTPUT);
+  pinMode(RELAY2, OUTPUT);
+  pinMode(SERVO1, OUTPUT);
+  pinMode(SERVO2, OUTPUT);
+  myServo1.attach(9);
+  myServo2.attach(10);
+  // led and button
+  pinMode(ledPins[0], OUTPUT);
+  pinMode(ledPins[1], OUTPUT);
+  pinMode(ledPins[2], OUTPUT);
+  pinMode(buttonOn, INPUT);
+}
+
+void loop() {i
+  
+  // wait for start 
+6
+    digitalWrite(ledPins[0], LOW); // green LED - ON
+    digitalWrite(ledPins[1], HIGH); // red LED - OFF
+    digitalWrite(ledPins[2], LOW); // red LED - Task completed
+
+
+  if(digitalRead(buttonOn) == HIGH) {
+
+    // Set LEDs correctly 
+    digitalWrite(ledPins[0], HIGH);
+    digitalWrite(ledPins[1], LOW);
+
+    // Robot path
+
+    // STAGE ONE: SCOOP ROCKS
+    // motor 4
+    digitalWrite(M4_DIR, HIGH); 
+    for (duty = 0; duty <= duty1; duty += 1) {  
+      analogWrite(M4_PWM, duty);              
+      delay(change);                                               
+    }
+    delay(time1);
+    for (duty = duty1; duty >= 0; duty -= 1) {  
+      analogWrite(M4_PWM, duty);              
+      delay(change);                                              
+    }
+    delay(stageDelay);
+
+    // STAGE TWO: CHANGE DIRECTION
+    // reverse - M1, M2
+    digitalWrite(M1_DIR, LOW);
+    digitalWrite(M2_DIR, LOW);
+    for (duty = 0; duty <= duty2; duty += 1) {  
+      analogWrite(M1_PWM, duty); 
+      analogWrite(M2_PWM, duty);             
+      delay(change);                                               
+    }
+    delay(time2rev);
+    for (duty = duty2; duty >= 0; duty -= 1) {  
+      analogWrite(M1_PWM, duty);
+      analogWrite(M2_PWM, duty);              
+      delay(change);                                              
+    }
+    delay(stageDelay);
+    // turn 180 deg left- M2: forward, M1: reverse
+    digitalWrite(M1_DIR, LOW);
+    digitalWrite(M2_DIR, HIGH);
+    for (duty = 0; duty <= duty2; duty += 1) {  
+      analogWrite(M1_PWM, duty); 
+      analogWrite(M2_PWM, duty);             
+      delay(change);                                               
+    }
+    delay(time2spin);
+    for (duty = duty2; duty >= 0; duty -= 1) {  
+      analogWrite(M1_PWM, duty);
+      analogWrite(M2_PWM, duty);              
+      delay(change);                                              
+    }
+    delay(stageDelay);
+    
+
+    // STAGE THREE: DRIVE TO RAMP
+    // M1, M2: forward
+    digitalWrite(M1_DIR, HIGH);
+    digitalWrite(M2_DIR, HIGH);
+    for (duty = 0; duty <= duty3; duty += 1) {  
+      analogWrite(M1_PWM, duty); 
+      analogWrite(M2_PWM, duty);             
+      delay(change);                                               
+    }
+    delay(time3);
+    for (duty = duty3; duty >= 0; duty -= 1) {  
+      analogWrite(M1_PWM, duty);
+      analogWrite(M2_PWM, duty);              
+      delay(change);                                              
+    }
+    delay(stageDelay);
+
+    // STAGE FOUR: TURN TO FACE RAMP
+    // M1: forward, M2: reverse
+    // turn 90 deg right - M1: forward, M2: reverse
+    digitalWrite(M1_DIR, HIGH);
+    digitalWrite(M2_DIR, LOW);
+    for (duty = 0; duty <= duty4; duty += 1) {  
+      analogWrite(M1_PWM, duty); 
+      analogWrite(M2_PWM, duty);             
+      delay(change);                                               
+    }
+    delay(time4);
+    for (duty = duty4; duty >= 0; duty -= 1) {  
+      analogWrite(M1_PWM, duty);
+      analogWrite(M2_PWM, duty);              
+      delay(change);                                              
+    }
+    delay(stageDelay);
+
+    // STAGE FIVE: DRIVE UP RAMP
+    // M1, M2: forward
+    digitalWrite(M1_DIR, HIGH);
+    digitalWrite(M2_DIR, HIGH);
+    for (duty = 0; duty <= duty5; duty += 1) {  
+      analogWrite(M1_PWM, duty); 
+      analogWrite(M2_PWM, duty);             
+      delay(change);                                               
+    }
+    delay(time5);
+    for (duty = duty5; duty >= 0; duty -= 1) {  
+      analogWrite(M1_PWM, duty);
+      analogWrite(M2_PWM, duty);              
+      delay(change);                                              
+    }
+    delay(stageDelay);
+
+    // STAGE SIX: DEPOSIT ROCKS ON TOP LEVEL
+    // motor 4
+    digitalWrite(M4_DIR, LOW); 
+    for (duty = 0; duty <= duty6; duty += 1) {  
+      analogWrite(M4_PWM, duty);              
+      delay(change);                                               
+    }
+    delay(time6);
+    for (duty = duty6; duty >= 0; duty -= 1) {  
+      analogWrite(M4_PWM, duty);              
+      delay(change);
+      finished = duty;                                              
+    }
+
+    while(finished == 0){
+      digitalWrite(ledPins[0], LOW);
+      digitalWrite(ledPins[2], HIGH);
+      state = 0;
+      delay(1000);
+      digitalWrite(ledPins[2], LOW);
+      delay(1000);
+    }
+        
+      
+    }
+
+  
+      
+}
