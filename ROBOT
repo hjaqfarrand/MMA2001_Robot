@@ -1,7 +1,7 @@
 // For MMA2001 Warman Competition
 // Team 207
 // Final robot running code
-// VERSION 2
+// VERSION 4
 
 // Robot didnt make it up the stairs
 // Changes: increasing up stairs speed, removing time between turn and going up:
@@ -116,7 +116,7 @@ void loop() {
     // motor 4
 
     // extend arm
-    digitalWrite(M4_DIR, LOW); 
+    digitalWrite(M4_DIR, HIGH); 
     for (duty = 0; duty <= duty1; duty += 1) {  
       analogWrite(M4_PWM, duty);              
       delay(change);                                               
@@ -129,7 +129,7 @@ void loop() {
     delay(stageDelay);
 
     // contract arm
-    digitalWrite(M4_DIR, HIGH); 
+    digitalWrite(M4_DIR, LOW); 
     for (duty = 0; duty <= duty1; duty += 1) {  
       analogWrite(M4_PWM, duty);              
       delay(change);                                               
