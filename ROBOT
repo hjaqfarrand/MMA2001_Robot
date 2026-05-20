@@ -95,10 +95,10 @@ void setup() {
   pinMode(buttonOn, INPUT);
 }
 
-void loop() {i
+void loop() {
   
   // wait for start 
-6
+
     digitalWrite(ledPins[0], LOW); // green LED - ON
     digitalWrite(ledPins[1], HIGH); // red LED - OFF
     digitalWrite(ledPins[2], LOW); // red LED - Task completed
