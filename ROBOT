@@ -114,6 +114,21 @@ void loop() {
 
     // STAGE ONE: SCOOP ROCKS
     // motor 4
+
+    // extend arm
+    digitalWrite(M4_DIR, LOW); 
+    for (duty = 0; duty <= duty1; duty += 1) {  
+      analogWrite(M4_PWM, duty);              
+      delay(change);                                               
+    }
+    delay(time1);
+    for (duty = duty1; duty >= 0; duty -= 1) {  
+      analogWrite(M4_PWM, duty);              
+      delay(change);                                              
+    }
+    delay(stageDelay);
+
+    // contract arm
     digitalWrite(M4_DIR, HIGH); 
     for (duty = 0; duty <= duty1; duty += 1) {  
       analogWrite(M4_PWM, duty);              
@@ -219,6 +234,21 @@ void loop() {
       finished = duty;                                              
     }
 
+    // STAGE SIX: DEPOSIT ROCKS ON TOP LEVEL
+    // motor 4
+    digitalWrite(M4_DIR, LOW); 
+    for (duty = 0; duty <= duty6; duty += 1) {  
+      analogWrite(M4_PWM, duty);              
+      delay(change);                                               
+    }
+    delay(time6);
+    for (duty = duty6; duty >= 0; duty -= 1) {  
+      analogWrite(M4_PWM, duty);              
+      delay(change);
+      finished = duty;                                              
+    }
+
+
     while(finished == 0){
       digitalWrite(ledPins[0], LOW);
       digitalWrite(ledPins[2], HIGH);
@@ -226,6 +256,11 @@ void loop() {
       delay(1000);
       digitalWrite(ledPins[2], LOW);
       delay(1000);
+      // ensure everything is off 
+      analogWrite(M1_PWM, 0); 
+      analogWrite(M2_PWM, 0);
+      analogWrite(M3_PWM, duty); 
+
     }
         
       
