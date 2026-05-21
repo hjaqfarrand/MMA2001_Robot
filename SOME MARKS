@@ -54,8 +54,8 @@ int finished = 1;
 
 // ONLY CHANGE VARIABLES INSIDE OF HERE
 // stage one - scoop rocks
-int time1 = 1500;
-int duty1 = 100;
+int time1 = 1000;
+int duty1 = 50;
 // stage two - reverse and turn
 int time2rev = 2000;
 int time2spin = 5000;
@@ -117,7 +117,7 @@ void loop() {
     // Robot path
 
     // PUT ARM DOWN
-    // reverse - M1, M2
+
     digitalWrite(M4_DIR, HIGH); 
     for (duty = 0; duty <= duty1; duty += 1) {  
       analogWrite(M4_PWM, duty);              
@@ -131,24 +131,6 @@ void loop() {
     delay(stageDelay);
 
 
-    digitalWrite(M1_DIR, HIGH);
-    digitalWrite(M2_DIR, HIGH);
-    for (duty = 0; duty <= 100; duty += 1) {  
-      analogWrite(M1_PWM, duty); 
-      analogWrite(M2_PWM, duty);             
-      delay(change);                                               
-    }
-
-    delay(5000);
-
-    for (duty = 100; duty >= 0; duty -= 1) {  
-      analogWrite(M1_PWM, duty);
-      analogWrite(M2_PWM, duty);              
-      delay(change);                                              
-    }
-
-    delay(stageDelay);
-
 
         
       
@@ -156,4 +138,3 @@ void loop() {
 
   
 }
-
